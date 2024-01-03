@@ -1,32 +1,43 @@
 //create schedule//
 const hoursArr = document.querySelectorAll(".time-block");
 
-const now =dayjs().format ("H")
+
 
 //get the squares color coded//
 for (let i=0; i<hoursArr.length; i++){
-    const hour = hoursArr[i].id.substring(5)
-
+    const hour = parseInt( hoursArr[i].id.split('-')[1])
+    console.log (hour)
+    const now =dayjs().hour()
+console.log (now)
     if(now === hour){
-        hoursArr[i].setAttribute('class, row time-block present')
+        hoursArr[i].setAttribute('class', 'row time-block present')  
     }
+    if(now > hour){
+        hoursArr[i].setAttribute('class', 'row time-block past')   
+    }
+    if(now < hour){
+        hoursArr[i].setAttribute('class', 'row time-block future')   
+    }
+    const text = localStorage.getItem(hoursArr[i].id)
+    if(text){
+        console.log(text)
+        hoursArr[i].children[1].value=text
+    }
+    
 }    
+const clickHandler = (event) => {
+    const text = event.target.previousElementSibling.value
+    const parentID = event.target.parentNode.id
+    console.log (text)
+    console.log (parentID)
+    localStorage.setItem(parentID, text)
 
-
-
-
-
-// save data to local storage - done
-
+}
 const buttonArr = document.querySelectorAll('button')
 const textAreaArr = document.querySelectorAll('.description')
 
 for (let i = 0; i < buttonArr.length; i++){
-    const clickHandler = () => {
-        const text = textAreaArr[i].value;
-        localStorage.setItem(i, text)
-
-    }
+    
 
     buttonArr[i].addEventListener('click', clickHandler)
 }
@@ -40,15 +51,13 @@ for (let i = 0; i < buttonArr.length; i++){
 
 //textAreaArr[i].value = whatever came back from local
 
-
-
 var currentHour = dayjs().hour();
 let date = dayjs().format ("DD, MMMM, YYYY");
 console.log (date);
 //current day is displayed at top when you open//
 let currentDay = document.querySelector ('#currentDay');
 
-let paragraph = document.createElement("p");
+const paragraph = document.createElement("p");
 paragraph.innerText = date;
 currentDay.appendChild(paragraph);
 
